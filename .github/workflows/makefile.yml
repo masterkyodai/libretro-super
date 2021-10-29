@@ -1,25 +1,47 @@
-name: Makefile CI
+# This is a basic workflow to help you get started with Actions
 
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  # This workflow contains a single job called "build"
   build:
-
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: actions/checkout@v2
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        
+
+          
+      # Removes source-control files and other miscellaneous files. Also fixes some permissions. Then puts all the project files under the plugin directory so Unreal Engine can find it
+      - name: Prepare Project 
+        run: |
+
+          sudo mkdir  libretro-super
+          shopt -s extglob dotglob
+          sudo mv !( libretro-super)  libretro-super
+          shopt -u dotglob
+          sudo chmod -R 755 *
+          
+      - name: Upload Build-Artifact
+        uses: actions/upload-artifact@v2.1.4
+        with:
+          # Artifact name
+          name: libretro-super
+          # Upload the whole project directory
+          path: ${{ github.workspace }}
+          # The desired behavior if no files are found using the provided path.
+          if-no-files-found: error
     
-    
-    - name: Install dependencies
-      run: make
-      
-    - name: Run check
-      run: make check
-      
-    - name: Run distcheck
-      run: make distcheck
