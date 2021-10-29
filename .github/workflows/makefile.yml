@@ -35,6 +35,9 @@ jobs:
           shopt -u dotglob
           sudo chmod -R 755 *
           
+      - name: Install dependencies
+        run: make
+          
       - name: Upload Build-Artifact
         uses: actions/upload-artifact@v2.1.4
         with:
