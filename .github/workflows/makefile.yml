@@ -31,7 +31,6 @@ jobs:
 
           sudo mkdir  libretro-super
           shopt -s extglob dotglob
-          sudo mv !( libretro-super)  libretro-super
           shopt -u dotglob
           sudo chmod -R 755 *
           
